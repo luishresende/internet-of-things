@@ -1,0 +1,203 @@
+[
+    {
+        "id": "c78397dc740a019b",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e2c6b2c4c273df67",
+        "type": "mqtt in",
+        "z": "c78397dc740a019b",
+        "name": "Prgroama A: In",
+        "topic": "luisresende/q9/chat/",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1a53dd38d2c67a4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 420,
+        "y": 240,
+        "wires": [
+            [
+                "5c272f0cca98e42e"
+            ]
+        ]
+    },
+    {
+        "id": "cf6f20deb92d93f3",
+        "type": "mqtt out",
+        "z": "c78397dc740a019b",
+        "name": "Programa A: Out",
+        "topic": "luisresende/q9/chat/",
+        "qos": "2",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d1a53dd38d2c67a4",
+        "x": 710,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "5c272f0cca98e42e",
+        "type": "debug",
+        "z": "c78397dc740a019b",
+        "name": "Programa A Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "a09c677c87852d57",
+        "type": "inject",
+        "z": "c78397dc740a019b",
+        "name": "Send msg",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "Programa A: Olá!",
+        "payloadType": "str",
+        "x": 420,
+        "y": 180,
+        "wires": [
+            [
+                "cf6f20deb92d93f3"
+            ]
+        ]
+    },
+    {
+        "id": "beec0d71e6f0e1ca",
+        "type": "mqtt in",
+        "z": "c78397dc740a019b",
+        "name": "Prgroama C: In",
+        "topic": "luisresende/q9/chat/",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1a53dd38d2c67a4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 420,
+        "y": 440,
+        "wires": [
+            [
+                "8745fd916107417f"
+            ]
+        ]
+    },
+    {
+        "id": "ab3dd54c9cc33105",
+        "type": "mqtt out",
+        "z": "c78397dc740a019b",
+        "name": "Programa C: Out",
+        "topic": "luisresende/q9/chat/",
+        "qos": "2",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d1a53dd38d2c67a4",
+        "x": 710,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "8745fd916107417f",
+        "type": "debug",
+        "z": "c78397dc740a019b",
+        "name": "Programa C Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "f9ba16f184555dd9",
+        "type": "inject",
+        "z": "c78397dc740a019b",
+        "name": "Send msg",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "Programa C: Olá!",
+        "payloadType": "str",
+        "x": 420,
+        "y": 380,
+        "wires": [
+            [
+                "ab3dd54c9cc33105"
+            ]
+        ]
+    },
+    {
+        "id": "d1a53dd38d2c67a4",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.mqtt-dashboard.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]

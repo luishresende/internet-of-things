@@ -1,0 +1,355 @@
+[
+    {
+        "id": "e81218acc4523cb8",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "d5fcb75b9ae6acd2",
+        "type": "mqtt in",
+        "z": "e81218acc4523cb8",
+        "name": "AirQuality",
+        "topic": "IPB/IoT/Lab/AirQuality",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1a53dd38d2c67a4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 720,
+        "y": 400,
+        "wires": [
+            [
+                "03e4ad4634f7244c"
+            ]
+        ]
+    },
+    {
+        "id": "dba70d87a40ab735",
+        "type": "mqtt in",
+        "z": "e81218acc4523cb8",
+        "name": "Light Consumer",
+        "topic": "IPB/IoT/Lab/LightCmd",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1a53dd38d2c67a4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 700,
+        "y": 480,
+        "wires": [
+            [
+                "03e4ad4634f7244c",
+                "77e7bebdb240d5ac"
+            ]
+        ]
+    },
+    {
+        "id": "d12f5fb58c4f999a",
+        "type": "mqtt in",
+        "z": "e81218acc4523cb8",
+        "name": "EnvironmentInfo",
+        "topic": "IPB/IoT/External/EnvironmentInfo",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1a53dd38d2c67a4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 700,
+        "y": 320,
+        "wires": [
+            [
+                "8f4cff58ee5c7b19",
+                "97549531a0208d80",
+                "03e4ad4634f7244c"
+            ]
+        ]
+    },
+    {
+        "id": "03e4ad4634f7244c",
+        "type": "debug",
+        "z": "e81218acc4523cb8",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "a1fbb744d7f61d51",
+        "type": "ui_gauge",
+        "z": "e81218acc4523cb8",
+        "name": "Temperature",
+        "group": "d32511b8ccf57a05",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "gauge",
+        "label": "C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1090,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "53e9fcaeaa300571",
+        "type": "ui_chart",
+        "z": "e81218acc4523cb8",
+        "name": "Humity",
+        "group": "d32511b8ccf57a05",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1080,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8f4cff58ee5c7b19",
+        "type": "function",
+        "z": "e81218acc4523cb8",
+        "name": "GetTemp",
+        "func": "msg.payload = msg.payload.temp;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 280,
+        "wires": [
+            [
+                "a1fbb744d7f61d51"
+            ]
+        ]
+    },
+    {
+        "id": "97549531a0208d80",
+        "type": "function",
+        "z": "e81218acc4523cb8",
+        "name": "GetHum",
+        "func": "msg.payload = msg.payload.hum;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 340,
+        "wires": [
+            [
+                "53e9fcaeaa300571"
+            ]
+        ]
+    },
+    {
+        "id": "f0a2639bf8301981",
+        "type": "ui_switch",
+        "z": "e81218acc4523cb8",
+        "name": "Light",
+        "label": "switch",
+        "tooltip": "",
+        "group": "d32511b8ccf57a05",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "IPB/IoT/Lab/LightCmd",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "on",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "off",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 790,
+        "y": 600,
+        "wires": [
+            [
+                "019375b0e1075d69"
+            ]
+        ]
+    },
+    {
+        "id": "9251166101ed7106",
+        "type": "ui_text",
+        "z": "e81218acc4523cb8",
+        "group": "d32511b8ccf57a05",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Light state:",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1090,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "77e7bebdb240d5ac",
+        "type": "function",
+        "z": "e81218acc4523cb8",
+        "name": "GetLightState",
+        "func": "if (msg.payload != \"off\" && msg.payload != \"on\") {\n    msg.payload = \"off\";\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 500,
+        "wires": [
+            [
+                "9251166101ed7106"
+            ]
+        ]
+    },
+    {
+        "id": "019375b0e1075d69",
+        "type": "mqtt out",
+        "z": "e81218acc4523cb8",
+        "name": "Light Publisher",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d1a53dd38d2c67a4",
+        "x": 980,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "d1a53dd38d2c67a4",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.mqtt-dashboard.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "d32511b8ccf57a05",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "e29c661441de7d55",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "e29c661441de7d55",
+        "type": "ui_tab",
+        "name": "q13",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "de72b17177eef3af",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
