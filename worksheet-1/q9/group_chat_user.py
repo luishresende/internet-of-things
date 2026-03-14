@@ -36,7 +36,7 @@ try:
             msg = session.prompt("Digite a sua mensagem: ").strip().lower()
             if msg:
                 msg = f"{my_username}: {msg}"
-                client.publish(CHAT_TOPIC, msg)
+                client.publish(CHAT_TOPIC, msg, qos=2)
 
 except KeyboardInterrupt:
     logger.info("Finalizando aplicação...")
