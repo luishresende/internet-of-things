@@ -1,0 +1,179 @@
+[
+    {
+        "id": "5c0a3930a4b3ee81",
+        "type": "tab",
+        "label": "Flow 4",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "cb08d63295a21bfa",
+        "type": "ui_switch",
+        "z": "5c0a3930a4b3ee81",
+        "name": "",
+        "label": "switch",
+        "tooltip": "",
+        "group": "d32511b8ccf57a05",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "IPB/IoT/Class02/a67608/LED",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "1",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "0",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 190,
+        "y": 320,
+        "wires": [
+            [
+                "45c10911efadfb37"
+            ]
+        ]
+    },
+    {
+        "id": "45c10911efadfb37",
+        "type": "mqtt out",
+        "z": "5c0a3930a4b3ee81",
+        "name": "ESP Led",
+        "topic": "IPB/IoT/Class02/a67608/LED",
+        "qos": "1",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d1a53dd38d2c67a4",
+        "x": 380,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "38dc5bdb838539fc",
+        "type": "debug",
+        "z": "5c0a3930a4b3ee81",
+        "name": "Debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "4217490657cf1d1d",
+        "type": "mqtt in",
+        "z": "5c0a3930a4b3ee81",
+        "name": "",
+        "topic": "IPB/IoT/Class02/a67608/LED",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1a53dd38d2c67a4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 280,
+        "y": 460,
+        "wires": [
+            [
+                "38dc5bdb838539fc"
+            ]
+        ]
+    },
+    {
+        "id": "43d0b16786badca9",
+        "type": "mqtt in",
+        "z": "5c0a3930a4b3ee81",
+        "name": "",
+        "topic": "IPB/IoT/Class02/a67608/status",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1a53dd38d2c67a4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 290,
+        "y": 580,
+        "wires": [
+            [
+                "38dc5bdb838539fc"
+            ]
+        ]
+    },
+    {
+        "id": "d32511b8ccf57a05",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "e29c661441de7d55",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d1a53dd38d2c67a4",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.mqtt-dashboard.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "e29c661441de7d55",
+        "type": "ui_tab",
+        "name": "q13",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "bcbe448cebac1576",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
