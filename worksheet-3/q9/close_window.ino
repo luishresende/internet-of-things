@@ -1,0 +1,137 @@
+/*
+ Basic ESP8266 MQTT example
+ This sketch demonstrates the capabilities of the pubsub library in combination
+ with the ESP8266 board/library.
+ It connects to an MQTT server then:
+  - publishes "hello world" to the topic "outTopic" every two seconds
+  - subscribes to the topic "inTopic", printing out any messages
+    it receives. NB - it assumes the received payloads are strings not binary
+  - If the first character of the topic "inTopic" is an 1, switch ON the ESP Led,
+    else switch it off
+ It will reconnect to the server if the connection is lost using a blocking
+ reconnect function. See the 'mqtt_reconnect_nonblocking' example for how to
+ achieve the same result without blocking the main loop.
+ To install the ESP8266 board, (using Arduino 1.6.4+):
+  - Add the following 3rd party board manager under "File -> Preferences -> Additional Boards Manager URLs":
+       http://arduino.esp8266.com/stable/package_esp8266com_index.json
+  - Open the "Tools -> Board -> Board Manager" and click install for the ESP8266"
+  - Select your ESP8266 in "Tools -> Board"
+*/
+
+#include <WiFi.h>
+#include <PubSubClient.h>
+#include <ArduinoJson.h>
+
+// Update these with values suitable for your network.
+
+const char* ssid = "MEO-783E30";
+const char* password = "****";
+const char* mqtt_server = "broker.mqtt-dashboard.com";
+
+const int BUILTIN_LED = 2;
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+unsigned long lastMsg = 0;
+#define MSG_BUFFER_SIZE	(50)
+char msg[MSG_BUFFER_SIZE];
+int value = 0;
+
+void setup_wifi() {
+
+  delay(10);
+  // We start by connecting to a WiFi network
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(300);
+    Serial.print(".");
+  }
+
+  randomSeed(micros());
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+
+  String message;
+
+  for (unsigned int i = 0; i < length; i++) {
+    message += (char)payload[i];
+  }
+
+  Serial.println(message);
+
+  JsonDocument doc;
+  DeserializationError error = deserializeJson(doc, message);
+
+  if (error) {
+    Serial.print("JSON parse failed: ");
+    Serial.println(error.c_str());
+    return;
+  }
+
+  float current_temp = doc["current_temp"];
+  float max_temp = doc["max_temp_to_close_window"];
+
+  Serial.print("Current: ");
+  Serial.println(current_temp);
+
+  Serial.print("Max: ");
+  Serial.println(max_temp);
+
+  if (current_temp >= max_temp) {
+    digitalWrite(BUILTIN_LED, HIGH);  // abre janela
+  } else {
+    digitalWrite(BUILTIN_LED, LOW);   // fecha janela
+  }
+}
+
+void reconnect() {
+  // Loop until we're reconnected
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    Serial.println(client.state());
+    // Set client ID
+    String clientId = "IPB-IoT-Class03-a67608";
+    // Attempt to connect
+    if (client.connect(clientId.c_str())) {
+      Serial.print("Connected succesfull. State: ");
+      Serial.println(client.state());
+      client.subscribe("IPB/IoT/a67608/Enviroment/Window", 0);
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
+    }
+  }
+}
+
+void setup() {
+  pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
+  Serial.begin(115200);
+  setup_wifi();
+
+  client.setServer(mqtt_server, 1883);
+  client.setCallback(callback);
+  reconnect();
+}
+
+void loop() {
+
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
+}

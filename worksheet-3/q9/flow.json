@@ -1,0 +1,503 @@
+[
+    {
+        "id": "de97603704ec2357",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "c087d8e79ff57646",
+        "type": "influxdb in",
+        "z": "de97603704ec2357",
+        "influxdb": "a3fd12a32749af1a",
+        "name": "Queries",
+        "query": "meanTemp = from(bucket: \"Worksheet3\")\n  |> range(start: -1h)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"AirQuality\")\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\n  |> group(columns: [])\n  |> mean()\n\nmaxTempToCloseWindow = from(bucket: \"Worksheet3\")\n  |> range(start: 2026-01-22T00:00:00Z)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"UserPreferences\")\n  |> filter(fn: (r) => r[\"_field\"] == \"max_temp_to_close_window\")\n  |> last()\n\nunion(tables: [meanTemp, maxTempToCloseWindow])",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "IPB",
+        "x": 840,
+        "y": 340,
+        "wires": [
+            [
+                "10962da37ad43d11",
+                "af58472fae4a7d57",
+                "17cc7ce0fb847f6d"
+            ]
+        ]
+    },
+    {
+        "id": "d150cc51cb4aa109",
+        "type": "ui_form",
+        "z": "de97603704ec2357",
+        "name": "",
+        "label": "Até que temperatura sua janela deve se manter fechada?",
+        "group": "93ee6e9b3bb572d6",
+        "order": 0,
+        "width": "6",
+        "height": "4",
+        "options": [
+            {
+                "label": "Temperatura",
+                "value": "temperature",
+                "type": "number",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "temperature": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "cancel",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 230,
+        "y": 40,
+        "wires": [
+            [
+                "2de5d5d9922e026a",
+                "5b76ae672958629b"
+            ]
+        ]
+    },
+    {
+        "id": "3a3d1b5162a5a3a7",
+        "type": "mqtt out",
+        "z": "de97603704ec2357",
+        "name": "",
+        "topic": "IPB/IoT/a67608/Enviroment/Window",
+        "qos": "1",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4f53d0990669ddd8",
+        "x": 1410,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "11e2c25bff7e1561",
+        "type": "influxdb batch",
+        "z": "de97603704ec2357",
+        "influxdb": "a3fd12a32749af1a",
+        "precision": "",
+        "retentionPolicy": "",
+        "name": "InfluxDB",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "IPB",
+        "bucket": "Worksheet3",
+        "x": 560,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "5b76ae672958629b",
+        "type": "function",
+        "z": "de97603704ec2357",
+        "name": "UserPreferences",
+        "func": "var payload = [{\n    measurement: \"UserPreferences\",\n    fields: {\n        max_temp_to_close_window: msg.payload.temperature,\n    },\n    tags: {\n        sensorID: \"_\",\n        location: \"_\"\n    }\n}]\nmsg.payload = payload\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 140,
+        "wires": [
+            [
+                "11e2c25bff7e1561",
+                "7f85409aeaf5a03e"
+            ]
+        ]
+    },
+    {
+        "id": "2de5d5d9922e026a",
+        "type": "debug",
+        "z": "de97603704ec2357",
+        "name": "Form Debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "10962da37ad43d11",
+        "type": "debug",
+        "z": "de97603704ec2357",
+        "name": "Influx Query Values",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "7f85409aeaf5a03e",
+        "type": "delay",
+        "z": "de97603704ec2357",
+        "name": "Delay 3s",
+        "pauseType": "delay",
+        "timeout": "3",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 560,
+        "y": 200,
+        "wires": [
+            [
+                "c087d8e79ff57646"
+            ]
+        ]
+    },
+    {
+        "id": "257bcaddfc556433",
+        "type": "mqtt in",
+        "z": "de97603704ec2357",
+        "name": "",
+        "topic": "IPB/IoT/a67608/Enviroment/Window",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "4f53d0990669ddd8",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 940,
+        "y": 420,
+        "wires": [
+            [
+                "12f7949c64cbe67f",
+                "6d6f64db2ae791c1"
+            ]
+        ]
+    },
+    {
+        "id": "12f7949c64cbe67f",
+        "type": "ui_text",
+        "z": "de97603704ec2357",
+        "group": "37b3d7e78130fc7b",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Max Temp to Close Window:",
+        "format": "{{msg.payload.max_temp_to_close_window}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1380,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "6d6f64db2ae791c1",
+        "type": "debug",
+        "z": "de97603704ec2357",
+        "name": "New Message",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1260,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "af58472fae4a7d57",
+        "type": "function",
+        "z": "de97603704ec2357",
+        "name": "Get Series Values",
+        "func": "var payload = {\n    current_temp: msg.payload[0]._value,\n    max_temp_to_close_window: msg.payload[1]._value\n}\n\nmsg.payload = payload\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 240,
+        "wires": [
+            [
+                "3a3d1b5162a5a3a7"
+            ]
+        ]
+    },
+    {
+        "id": "19fd06a192625d2c",
+        "type": "ui_button",
+        "z": "de97603704ec2357",
+        "name": "",
+        "group": "37b3d7e78130fc7b",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "label": "Iniciar fluxo",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 550,
+        "y": 420,
+        "wires": [
+            [
+                "f65380b90e5b1cae",
+                "c087d8e79ff57646"
+            ]
+        ]
+    },
+    {
+        "id": "17cc7ce0fb847f6d",
+        "type": "function",
+        "z": "de97603704ec2357",
+        "name": "Get Max Temp Value",
+        "func": "var payload = {\n    max_temp_to_close_window: msg.payload[0]._value\n}\n\nmsg.payload = payload\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1100,
+        "y": 340,
+        "wires": [
+            [
+                "12f7949c64cbe67f"
+            ]
+        ]
+    },
+    {
+        "id": "f65380b90e5b1cae",
+        "type": "delay",
+        "z": "de97603704ec2357",
+        "name": "Delay 1h",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "hours",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 560,
+        "y": 320,
+        "wires": [
+            [
+                "19fd06a192625d2c"
+            ]
+        ]
+    },
+    {
+        "id": "2b1c0a7dea7a9232",
+        "type": "ui_gauge",
+        "z": "de97603704ec2357",
+        "name": "",
+        "group": "0e5bdcbdcb1c6893",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "gauge",
+        "label": "units",
+        "format": "{{payload.temp}}",
+        "min": 0,
+        "max": "40",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 530,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "328ec1853e56dccb",
+        "type": "mqtt in",
+        "z": "de97603704ec2357",
+        "name": "",
+        "topic": "IPB/IoT/Lab/AirQuality",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "4f53d0990669ddd8",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 400,
+        "wires": [
+            [
+                "df4d109370041986"
+            ]
+        ]
+    },
+    {
+        "id": "df4d109370041986",
+        "type": "function",
+        "z": "de97603704ec2357",
+        "name": "AirQuality",
+        "func": "msg.payload = {\n    temp: msg.payload.temp\n}\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 460,
+        "wires": [
+            [
+                "2b1c0a7dea7a9232"
+            ]
+        ]
+    },
+    {
+        "id": "a3fd12a32749af1a",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": 8086,
+        "protocol": "http",
+        "database": "Worksheet3",
+        "name": "Localhost",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://127.0.0.1:8086",
+        "timeout": 10,
+        "rejectUnauthorized": false
+    },
+    {
+        "id": "93ee6e9b3bb572d6",
+        "type": "ui_group",
+        "name": "Atualize a temperatura",
+        "tab": "9af391410a968b63",
+        "order": 2,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "4f53d0990669ddd8",
+        "type": "mqtt-broker",
+        "name": "MQTT Dashboard",
+        "broker": "broker.mqtt-dashboard.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "37b3d7e78130fc7b",
+        "type": "ui_group",
+        "name": "Configuração atual",
+        "tab": "9af391410a968b63",
+        "order": 4,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "0e5bdcbdcb1c6893",
+        "type": "ui_group",
+        "name": "Temperatura Atual",
+        "tab": "9af391410a968b63",
+        "order": 5,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "9af391410a968b63",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "abf0f8c8537c181e",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-influxdb": "0.7.0",
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
